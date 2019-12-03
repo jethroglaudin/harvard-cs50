@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <ctype.h>
 
+#include "bmp.h"
+
 
 int main(int argc, char *argv[])
 {
