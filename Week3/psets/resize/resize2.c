@@ -104,7 +104,7 @@ int main(int argc, char *argv[])
         {
 
             // iterate over pixels in scanline
-            for (int pixel = 0; pixel < bi.biWidth; pixel++)
+            for (int pixels = 0; pixels < bi.biWidth; pixels++)
             {
                 // temporary storage
                 RGBTRIPLE triple;
