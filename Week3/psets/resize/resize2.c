@@ -2,28 +2,40 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <ctype.h>
 #include "bmp.h"
 
 int main(int argc, char *argv[])
 {
     // ensure proper usage
-    if (argc != 3)
+    if (argc != 4)
     {
         fprintf(stderr, "Usage: copy infile outfile\n");
         return 1;
     }
+    int resize_num = atoi(argv[1]);
 
-    // remember filenames
-    char *infile = argv[1];
-    char *outfile = argv[2];
+    if (!resize_num && !isdigit(resize_num))
+    {
+        fprintf(stderr, "Invalid Input\n");
+        return 2;
+    }
+
+
+    if (resize_num < 0 || resize_num > 100)
+    {
+        fprintf(stderr, "Number must be betwee 0 - 100\n");
+        return 3;
+    }
+    char *infile = argv[2];
+    char *outfile = argv[3];
 
     // open input file
     FILE *inptr = fopen(infile, "r");
     if (inptr == NULL)
     {
         fprintf(stderr, "Could not open %s.\n", infile);
-        return 2;
+        return 4;
     }
 
     // open output file
@@ -32,7 +44,7 @@ int main(int argc, char *argv[])
     {
         fclose(inptr);
         fprintf(stderr, "Could not create %s.\n", outfile);
-        return 3;
+        return 5;
     }
 
     // read infile's BITMAPFILEHEADER
@@ -50,41 +62,76 @@ int main(int argc, char *argv[])
         fclose(outptr);
         fclose(inptr);
         fprintf(stderr, "Unsupported file format.\n");
-        return 4;
+        return 6;
     }
 
+
+
+    // create outfile's BITMAPFILEHEADER
+    BITMAPFILEHEADER new_bf = bf;
+
+    // create outfile's BITMAPINFOHEADER
+    BITMAPINFOHEADER  new_bi = bi;
+
+    // original width now will be multipled by the num the user provided
+    new_bi.biWidth *= resize_num;
+
+    // original height now will be multiplied by the num the user provided
+    new_bi.biHeight *= resize_num;
+
+    int old_padding = (4 - (bi.biWidth * sizeof(RGBTRIPLE)) % 4) % 4;
+    int new_padding = (4 - (new_bi.biWidth * sizeof(RGBTRIPLE)) % 4) % 4;
+
+
+
+    // updating new bi sizeimage
+    new_bi.biSizeImage = ((sizeof(RGBTRIPLE) * new_bi.biWidth) + new_padding) * abs(new_bi.biHeight);
+
+    // updating bf size
+    new_bf.bfSize = new_bi.biSizeImage + sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER);
+
     // write outfile's BITMAPFILEHEADER
-    fwrite(&bf, sizeof(BITMAPFILEHEADER), 1, outptr);
+    fwrite(&new_bf, sizeof(BITMAPFILEHEADER), 1, outptr);
 
     // write outfile's BITMAPINFOHEADER
-    fwrite(&bi, sizeof(BITMAPINFOHEADER), 1, outptr);
+    fwrite(&new_bi, sizeof(BITMAPINFOHEADER), 1, outptr);
 
-    // determine padding for scanlines
-    int padding = (4 - (bi.biWidth * sizeof(RGBTRIPLE)) % 4) % 4;
 
     // iterate over infile's scanlines
-    for (int i = 0, biHeight = abs(bi.biHeight); i < biHeight; i++)
+    for (int column = 0, biHeight = abs(bi.biHeight); column < biHeight; column++)
     {
-        // iterate over pixels in scanline
-        for (int j = 0; j < bi.biWidth; j++)
+        for (int cursor = 0; cursor < resize_num; cursor++)
         {
-            // temporary storage
-            RGBTRIPLE triple;
 
-            // read RGB triple from infile
-            fread(&triple, sizeof(RGBTRIPLE), 1, inptr);
+            // iterate over pixels in scanline
+            for (int pixel = 0; pixel < bi.biWidth; pixel++)
+            {
+                // temporary storage
+                RGBTRIPLE triple;
 
-            // write RGB triple to outfile
-            fwrite(&triple, sizeof(RGBTRIPLE), 1, outptr);
-        }
+                // read RGB triple from infile
+                fread(&triple, sizeof(RGBTRIPLE), 1, inptr);
 
-        // skip over padding, if any
-        fseek(inptr, padding, SEEK_CUR);
+                for (int write = 0; write < resize_num; write++)
+                {
+                    // write RGB triple to outfile
+                    fwrite(&triple, sizeof(RGBTRIPLE), 1, outptr);
+                }
+            }
 
-        // then add it back (to demonstrate how)
-        for (int k = 0; k < padding; k++)
-        {
-            fputc(0x00, outptr);
+            // skip over padding, if any
+            fseek(inptr, old_padding, SEEK_CUR);
+
+            // then add it back (to demonstrate how)
+            for (int k = 0; k < new_padding; k++)
+            {
+                fputc(0x00, outptr);
+            }
+
+            if (cursor < resize_num - 1)
+            {
+                fseek(inptr, -((bi.biWidth * sizeof(RGBTRIPLE)) + old_padding), SEEK_CUR);
+            }
         }
     }
 
