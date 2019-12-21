@@ -5,6 +5,7 @@
 
 typedef uint8_t BYTE;
 
+
 int main(int argc, char *argv[])
 {
     if (argc != 2)
@@ -19,7 +20,7 @@ int main(int argc, char *argv[])
     // open memory card with mode set to "r" for READ
     FILE *inptr = fopen(memory_card, "r");
 
-    if(inptr == NULL)
+    if (inptr == NULL)
     {
         fprintf(stderr, "Could not open file %s\n", memory_card);
         return 2;
@@ -36,14 +37,14 @@ int main(int argc, char *argv[])
 
     bool new_jpeg_header = false;
 
-    while(fread(&buffer, sizeof(buffer), 1, inptr))
+    while (fread(&buffer, sizeof(buffer), 1, inptr))
     {
         if (buffer[0] == 0xff && buffer[1] == 0xd8 && buffer[2] == 0xff && (buffer[3] & 0xf0) == 0xe0)
         {
             // until we find our first jpeg header img will remain close
-            if(new_jpeg_header == true)
+            if (new_jpeg_header == true)
             {
-               fclose(img);
+                fclose(img);
             }
 
             else
@@ -56,7 +57,7 @@ int main(int argc, char *argv[])
             img = fopen(filename, "w");
             count++;
         }
-        if(new_jpeg_header)
+        if (new_jpeg_header)
         {
             fwrite(&buffer, sizeof(buffer), 1, img);
         }
