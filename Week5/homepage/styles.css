@@ -1,0 +1,50 @@
+
+.navbar {
+    background-color: rgb(135, 228, 235)
+}
+
+nav ul {
+    display: flex;
+    justify-content: flex-end;
+
+
+}
+
+nav > ul > li  {
+
+padding: 10px 20px;
+display: flex;
+justify-content: flex-end;
+
+}
+
+a {
+    list-style-type: none;
+}
+
+.second-container{
+
+}
+
+.first-container {
+   display: flex;
+   align-content: space-between;
+   /* background-color: orange; */
+}
+
+.row {
+
+   /* margin-left: 15px; */
+
+
+
+}
+
+footer {
+    margin-top: 90px;
+    text-align: center;
+    background-color: rgb(52, 52, 133);
+    color: white;
+    font-size: 20px;
+    padding: 50px;
+}
