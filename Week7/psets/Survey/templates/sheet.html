@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+
+{% block main %}
+
+<link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet">
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+
+<table class="table" id="consumer_sheet" style-"width:300%">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Brand</th>
+            <th>Carrier</th>
+            <th>Satisfied with Phone?</th>
+            <th>Satisfied with Phone Carrier?</th>
+
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for consumer_row in consumers %}
+        <tr>
+            <td>{{ consumer_row[0] }}</td>
+            <td>{{ consumer_row[1] }}</td>
+            <td>{{ consumer_row[2] }}</td>
+            <td>{{ consumer_row[3] }}</td>
+            <td>{{ consumer_row[4] }}</td>
+            <td>{{ consumer_row[5] }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<script>
+    $(document).ready(function() {
+    $('#consumer_sheet').DataTable();
+} );
+</script>
+
+
+
+{% endblock %}

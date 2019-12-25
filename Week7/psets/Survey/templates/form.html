@@ -1,0 +1,116 @@
+{% extends "layout.html" %}
+
+{% block main %}
+
+
+    <!-- http://getbootstrap.com/docs/4.1/content/typography/ -->
+    <h1 class="mb-3">Form</h1>
+
+    <!-- http://getbootstrap.com/docs/4.1/components/forms/ -->
+
+    <form action="/form" method="post">
+    <div class="form-row">
+        <div class="form-group col-md-6">
+           <input class="form-control" type="text" autocommplete="off" name="name" placeholder="Name" id ="name">
+           <small class="form-text text-muted">Please Enter Full Name</small>
+        </div>
+        <div class="form-group col-md-6">
+        <input type="email" id="email" class="form-control" placeholder="Email" name="email">
+    </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-6">
+        <label for="phone-brands">What is your Phone's Manufacturer</label>
+        <select class="form-control" name="brand" id="brands" style="width: 300px;">
+            <option disabled selected value="">Brand</option>
+            <option value="Apple">Apple</option>
+            <option value="Samsung">Samsung</option>
+            <option value="Vivo">Vivo</option>
+            <option value="Lenovo">Lenovo</option>
+            <option value="Google">Google</option>
+            <option value="Lg">LG</option>
+            <option value="Other">Other</option>
+        </select>
+        </div>
+
+        <div class="form-group col-md-4">
+        <label for="yes_no_input">Are you Satisfied with your phone?</label>
+        <div class="form-check">
+        <input type="radio" class="form-check-input" name="satisfied" value="Yes">
+        <label class="form-check-label"for="yes_no_input">Yes, I am satisfied.</label>
+        <br>
+        <input type="radio" class="form-check-input" name="satisfied" value="No">
+        <label class="form-check-label"for="yes_no_input" name="satisfied">No, I'm not satisfied.</label>
+        </div>
+
+        </div>
+    </div>
+    <br>
+
+    <div class="form-row">
+    <div class="form-group col-md-6">
+        <label for="phone-carrier">What is your phone carrier</label>
+        <select name="carrier" class="form-control" id="carrier"style="width: 300px;">
+            <option disabled selected value="">Carrier</option>
+            <option value="Tmobile">T-Mobile</option>
+            <option value="Verizon">Verizon</option>
+            <option value="Sprint">Sprint</option>
+            <option value="AT&T">AT&T</option>
+            <option value="Other">Other</option>
+        </select>
+    </div>
+    <div class="form-group col-md-4">
+        <label for="yes_no_input">Are you planning on changing phone carriers in the near future?</label>
+        <div class="form-check">
+        <input type="radio" class="form-check-input" name="switch" value="Yes">
+        <label class="form-check-label"for="yes_no_input">Yes, I'm looking for a new carrier.</label>
+        <br>
+        <input type="radio" class="form-check-input" name="switch" value="No">
+        <label class="form-check-label"for="yes_no_input">Not at this moment.</label>
+        </div>
+
+        </div>
+
+    </div>
+
+    <!--<div class="form-group" id="yes_no">-->
+    <!--    <h3</h3>-->
+    <!--    <input type="radio" value="">-->
+    <!--</div>-->
+
+        <!-- http://getbootstrap.com/docs/4.1/components/buttons/ -->
+        <button class="btn btn-primary" type="submit">Submit</button>
+
+    </form>
+    </div>
+
+
+    <script>
+
+        /* TODO */
+        var name = document.getElementById('name').value;
+        console.log(name)
+        document.querySelector('form').onsubmit = function() {
+            if(!document.getElementById('name').value){
+                alert('You must provide your full name!');
+                return false;
+            }
+            else if(!document.getElementById('email').value){
+                alert('You must provide your email!');
+                return false;
+            }
+            else if(!document.getElementById('brands').value){
+                alert('Please select your phone brand');
+                return false;
+            }
+            else if(!document.getElementById('carrier').value){
+                alert('Please select your phone carrier');
+                return false;
+            }
+            return true;
+        };
+
+    </script>
+
+{% endblock %}
