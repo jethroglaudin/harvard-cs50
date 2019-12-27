@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block main %}
+
+
+    <form action="/register" method="POST" id="registerUser">
+        <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" name="username" placeholder="username">
+        </div>
+        <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" name="password" placeholder="password">
+        </div>
+        <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" name="confirmation" placeholder="confirm password">
+        </div>
+        <div class="form-group">
+            <button class="btn btn-primary" type="submit">Submit</button>
+        </div>
+    </form>
+    <script>
+        $("document").ready(function(){
+           $("form").on("submit", function(e){
+               e.preventDefault();
+               let username = $("#username").val();
+               $.get(`/check?username=${username}`, (response) => {
+                   if(response)
+                       document.querySelector("#registerUser").submit();
+                    else {
+                       alert("Username is already in user");
+                       document.querySelector("#registerUser").reset();
+                   }
+               });
+           });
+        });
+    </script>
+{% endblock %}

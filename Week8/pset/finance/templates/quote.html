@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Logout
+{% endblock %}
+
+{% block main %}
+<h2>Look Up Stocks!</h2>
+<br>
+    <form action="/quote" method="POST">
+        <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" name="symbol" placeholder="Search Stocks" type="text">
+            <button class="btn btn-primary" type="submit">Search</button>
+        </div>
+    </form>
+
+{% endblock %}
